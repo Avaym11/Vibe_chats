@@ -1,15 +1,17 @@
-# Node.js Hello World Recipe App
+# ⚡ VibeSphere — Gen Z Chat & Daily Highlights
 
-<!-- #ZEROPS_EXTRACT_START:intro# -->
-A [Node.js](https://nodejs.org) 22 application built with [Express](https://expressjs.com) and [TypeScript](https://www.typescriptlang.org), connected to a [PostgreSQL](https://www.postgresql.org) database. Demonstrates idempotent migrations via `zsc execOnce` and a health endpoint at `/` that queries migrated data to confirm both database connectivity and schema integrity.
-Used within [Node.js Hello World recipe](https://app.zerops.io/recipes/nodejs-hello-world) for [Zerops](https://zerops.io) platform.
-<!-- #ZEROPS_EXTRACT_END:intro# -->
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-https%3A%2F%2Fappdev--2bf8--3000.prg1.zerops.app-brightgreen?style=for-the-badge&logo=zerops)](https://appdev-2bf8-3000.prg1.zerops.app)
 
-⬇️ **Full recipe page and deploy with one-click**
+🌐 **Live Application URL**: [https://appdev-2bf8-3000.prg1.zerops.app](https://appdev-2bf8-3000.prg1.zerops.app)
 
-[![Deploy on Zerops](https://github.com/zeropsio/recipe-shared-assets/blob/main/deploy-button/light/deploy-button.svg)](https://app.zerops.io/recipes/nodejs-hello-world?environment=small-production)
+VibeSphere is a full-stack real-time Gen Z community chat and daily highlights platform built with **Node.js 22**, **Express**, **TypeScript**, **WebSockets (`ws`)**, and **PostgreSQL** deployed on **Zerops**.
 
-![nodejs cover](https://github.com/zeropsio/recipe-shared-assets/blob/main/covers/svg/cover-nodejs.svg)
+## 🚀 Features
+- 💬 **Real-time WebSocket Chat**: Channel rooms (`#main-stage`, `#fits-and-drip`, `#meme-vault`, `#soundtrack`).
+- 🔐 **JWT Authentication & Security**: Password hashing with `bcryptjs` and user session tokens.
+- ✨ **Daily Highlights & Vibe Check**: Real-time poll voting and community slang dictionary.
+- 💅 **Modern Dark / Neon UI**: Responsive glassmorphism interface.
+
 
 ## Integration Guide
 
