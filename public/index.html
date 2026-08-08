@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VIBESPHERE ⚡ Gen Z Social Media Chat & Daily Highlights</title>
+  <meta name="description" content="The ultimate Gen Z social media chatting webapp with daily highlights, live slang translator, hot take polls, and real-time squad chat." />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <!-- Header Bar -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-icon">⚡</div>
+      <div>
+        <span class="brand-title">VIBESPHERE</span>
+        <span class="brand-badge">Gen Z Hub</span>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="chat">
+        <span>💬</span> Squad Chat
+      </button>
+      <button class="nav-tab" data-tab="highlights">
+        <span>✨</span> Daily Highlights
+      </button>
+      <button class="nav-tab" data-tab="members">
+        <span>⚡</span> Community
+      </button>
+    </nav>
+
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <button class="icon-btn" id="slang-toggle-btn" title="Toggle Gen Z Slang Auto-Translator">🧠</button>
+      <button class="icon-btn" id="sound-toggle-btn" title="Toggle Audio Sound FX">🔊</button>
+      <div id="user-profile-container">
+        <!-- Dynamically rendered by app.js -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Container -->
+  <main class="app-container">
+    <!-- TAB 1: SQUAD CHAT -->
+    <section id="tab-chat" class="tab-content active">
+      <div class="chat-layout">
+        <!-- Sidebar Left: Channels -->
+        <aside class="sidebar-panel glass-panel chat-sidebar-left">
+          <div class="sidebar-title">⚡ Squad Channels</div>
+          <div class="channel-list" id="channels-list">
+            <!-- Dynamically loaded channels -->
+          </div>
+        </aside>
+
+        <!-- Main Chat Box -->
+        <div class="chat-box glass-panel">
+          <!-- Chat Header -->
+          <div class="chat-header">
+            <div class="channel-info">
+              <h2 id="current-channel-title">#main-stage</h2>
+              <p id="current-channel-desc">The central gathering spot for Gen Z chatter & trend drops</p>
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-dim); display: flex; align-items: center; gap: 6px;">
+              <span style="width: 8px; height: 8px; background: var(--accent-emerald); border-radius: 50%; display: inline-block;"></span> Live
+            </div>
+          </div>
+
+          <!-- Messages Stream -->
+          <div class="messages-container" id="messages-container">
+            <!-- Dynamically rendered messages -->
+          </div>
+
+          <!-- Typing Bar & Input Form -->
+          <div class="chat-input-area">
+            <div class="typing-bar" id="typing-indicator-bar"></div>
+
+            <!-- Image Attachment Preview Bar & NSFW Flag -->
+            <div id="image-preview-bar" style="display: none; align-items: center; justify-content: space-between; gap: 10px; background: rgba(255, 255, 255, 0.05); padding: 8px 14px; border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--border-glass);">
+              <div style="display: flex; align-items: center; gap: 10px; overflow: hidden;">
+                <img id="image-preview-thumb" src="" style="width: 42px; height: 42px; border-radius: 8px; object-fit: cover; border: 1px solid var(--accent-purple);" alt="Preview" />
+                <span id="image-preview-name" style="font-size: 0.82rem; color: var(--text-muted); text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 180px;">Image attached</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <label class="nsfw-checkbox-label" style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 700; color: #f472b6; cursor: pointer;" title="Blur image by default until clicked">
+                  <input type="checkbox" id="nsfw-toggle-checkbox" style="accent-color: var(--accent-pink); width: 16px; height: 16px; cursor: pointer;" />
+                  🔞 Mark NSFW (Blur)
+                </label>
+                <button type="button" class="icon-btn" style="width: 28px; height: 28px; font-size: 0.8rem; border: none; background: rgba(255,255,255,0.1);" onclick="clearImageAttachment()" title="Remove image">✕</button>
+              </div>
+            </div>
+
+            <form id="chat-form">
+              <div class="input-wrapper">
+                <input
+                  type="text"
+                  id="chat-input-field"
+                  class="chat-input"
+                  placeholder="Drop a message or Gen Z slang... (e.g. no cap this app is cooking 💅)"
+                  autocomplete="off"
+                />
+                <input type="file" id="device-image-input" accept="image/*" style="display: none;" onchange="handleDeviceImageSelect(event)" />
+                <button type="button" class="icon-btn" style="width:34px; height:34px; border:none; background:none;" onclick="triggerDeviceImagePicker()" title="Upload image from your device 📁">📁</button>
+                <button type="button" class="icon-btn" style="width:34px; height:34px; border:none; background:none;" onclick="toggleImageAttach()" title="Paste image URL 🖼️">🖼️</button>
+                <button type="submit" class="send-btn">
+                  <span>Send</span> ⚡
+                </button>
+              </div>
+              <div id="image-input-container" style="display: none; margin-top: 8px;">
+                <input type="url" id="image-url-input" class="form-input" style="width: 100%;" placeholder="Paste Image / GIF URL (optional)" oninput="handleImageUrlInput(event)" />
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Sidebar Right: Active Members & Quick Vibe Info -->
+        <aside class="sidebar-panel glass-panel chat-sidebar-right">
+          <div class="sidebar-title">✨ Slang Dictionary</div>
+          <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+            Hover over highlighted pink words in chat messages to translate Gen Z slang in real-time! 🧠
+          </div>
+
+          <div class="sidebar-title" style="margin-top: 10px;">🔥 Quick Slang Keys</div>
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.82rem;">
+            <div style="padding: 6px 10px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass);">
+              <b style="color: var(--accent-pink);">Rizz</b>: Charisma & smooth charm
+            </div>
+            <div style="padding: 6px 10px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass);">
+              <b style="color: var(--accent-cyan);">Ate</b>: Crushed it completely 💅
+            </div>
+            <div style="padding: 6px 10px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass);">
+              <b style="color: var(--accent-amber);">Crashed Out</b>: Went crazy / lost temper
+            </div>
+            <div style="padding: 6px 10px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass);">
+              <b style="color: var(--accent-emerald);">No Cap</b>: 100% truth, no lie
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- TAB 2: DAILY HIGHLIGHTS -->
+    <section id="tab-highlights" class="tab-content">
+      <div id="daily-highlights-content">
+        <!-- Dynamically loaded daily highlights -->
+      </div>
+    </section>
+
+    <!-- TAB 3: COMMUNITY MEMBERS & DMS -->
+    <section id="tab-members" class="tab-content">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800;">⚡ Gen Z Squad Directory</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Connect with main characters & start direct message vibes.</p>
+      </div>
+      <div class="members-grid" id="members-grid-container">
+        <!-- Dynamically rendered community members -->
+      </div>
+    </section>
+  </main>
+
+  <!-- AUTHENTICATION MODAL ("login must through") -->
+  <div class="modal-overlay" id="auth-modal-overlay">
+    <div class="modal-card glass-panel">
+      <div class="modal-header">
+        <div class="modal-title">🔐 Welcome to VibeSphere</div>
+        <button class="icon-btn" style="width:30px; height:30px;" onclick="closeAuthModal()">✕</button>
+      </div>
+
+      <!-- Auth Modal Tabs -->
+      <div class="nav-tabs" style="width: 100%; display: flex; justify-content: space-around;">
+        <button class="nav-tab active auth-tab-btn" id="auth-tab-login" onclick="switchAuthTab('login')">Log In</button>
+        <button class="nav-tab auth-tab-btn" id="auth-tab-register" onclick="switchAuthTab('register')">Sign Up</button>
+        <button class="nav-tab auth-tab-btn" id="auth-tab-demo" onclick="switchAuthTab('demo')">⚡ Demo Logins</button>
+      </div>
+
+      <!-- Form 1: Log In -->
+      <form id="form-login" class="auth-form-body" style="display: flex; flex-direction: column; gap: 14px;" onsubmit="handleLoginSubmit(event)">
+        <div class="form-group">
+          <label class="form-label">Username or Email</label>
+          <input type="text" id="login-username-input" class="form-input" placeholder="e.g. kai_rizzler" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="login-password-input" class="form-input" placeholder="••••••••" required />
+            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('login-password-input', this)" title="Toggle password visibility">👁️</button>
+          </div>
+        </div>
+        <button type="submit" class="auth-btn-primary" style="width: 100%; margin-top: 10px;">
+          Log In & Join Vibe ⚡
+        </button>
+      </form>
+
+      <!-- Form 2: Register / Sign Up -->
+      <form id="form-register" class="auth-form-body" style="display: none; flex-direction: column; gap: 14px;" onsubmit="handleRegisterSubmit(event)">
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input type="text" id="reg-username-input" class="form-input" placeholder="Choose your vibe name" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" id="reg-email-input" class="form-input" placeholder="your@email.com" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="reg-password-input" class="form-input" placeholder="At least 6 characters" required />
+            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('reg-password-input', this)" title="Toggle password visibility">👁️</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Vibe Badge</label>
+          <input type="text" id="reg-vibe-input" class="form-input" placeholder="e.g. ✨ Main Character, 💀 Cooked, 🔥 Rizz Master" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Avatar Image URL (Optional)</label>
+          <input type="url" id="reg-avatar-input" class="form-input" placeholder="https://..." />
+        </div>
+        <button type="submit" class="auth-btn-primary" style="width: 100%; margin-top: 10px;">
+          Create Account & Enter 🚀
+        </button>
+      </form>
+
+      <!-- Form 3: Quick Demo Accounts -->
+      <div id="form-demo" class="auth-form-body" style="display: none; flex-direction: column; gap: 12px;">
+        <div style="font-size: 0.85rem; color: var(--text-muted); text-align: center;">
+          Click any preset persona to log in instantly without typing!
+        </div>
+
+        <div class="demo-account-grid">
+          <div class="demo-account-card" onclick="quickDemoLogin('kai_rizzler')">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" style="width:36px; height:36px; border-radius:50%;" />
+            <div>
+              <div style="font-weight:700; font-size:0.88rem;">kai_rizzler</div>
+              <div style="font-size:0.7rem; color:var(--accent-pink);">🔥 Main Character</div>
+            </div>
+          </div>
+
+          <div class="demo-account-card" onclick="quickDemoLogin('skibidi_zack')">
+            <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=100&q=80" style="width:36px; height:36px; border-radius:50%;" />
+            <div>
+              <div style="font-weight:700; font-size:0.88rem;">skibidi_zack</div>
+              <div style="font-size:0.7rem; color:var(--accent-cyan);">💀 Cooked</div>
+            </div>
+          </div>
+
+          <div class="demo-account-card" onclick="quickDemoLogin('maya_aesthetic')">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=100&q=80" style="width:36px; height:36px; border-radius:50%;" />
+            <div>
+              <div style="font-weight:700; font-size:0.88rem;">maya_aesthetic</div>
+              <div style="font-size:0.7rem; color:var(--accent-purple);">✨ Aesthetic</div>
+            </div>
+          </div>
+
+          <div class="demo-account-card" onclick="quickDemoLogin('dev_no_cap')">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" style="width:36px; height:36px; border-radius:50%;" />
+            <div>
+              <div style="font-weight:700; font-size:0.88rem;">dev_no_cap</div>
+              <div style="font-size:0.7rem; color:var(--accent-emerald);">⚡ Code Wizard</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- USER PROFILE MODAL -->
+  <div class="modal-overlay" id="profile-modal-overlay">
+    <div class="modal-card glass-panel" style="text-align: center; align-items: center;">
+      <div class="modal-header" style="width: 100%;">
+        <div class="modal-title">👤 User Profile</div>
+        <button class="icon-btn" style="width:30px; height:30px;" onclick="closeProfileModal()">✕</button>
+      </div>
+      <div id="profile-modal-body" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 14px;">
+        <!-- Populated dynamically by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT MESSAGE MODAL -->
+  <div class="modal-overlay" id="edit-modal-overlay">
+    <div class="modal-card glass-panel">
+      <div class="modal-header">
+        <div class="modal-title">✏️ Edit Message</div>
+        <button class="icon-btn" style="width:30px; height:30px;" onclick="closeEditModal()">✕</button>
+      </div>
+      <form id="edit-message-form" class="auth-form-body" style="display: flex; flex-direction: column; gap: 14px;" onsubmit="handleSaveEdit(event)">
+        <input type="hidden" id="edit-message-id" />
+        <div class="form-group">
+          <label class="form-label">Message Text</label>
+          <input type="text" id="edit-message-content" class="form-input" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Image Attachment URL (Optional)</label>
+          <input type="text" id="edit-message-image" class="form-input" placeholder="Paste image URL or clear to remove image" />
+        </div>
+        <div class="form-group" style="flex-direction: row; align-items: center; gap: 8px;">
+          <input type="checkbox" id="edit-message-nsfw" style="accent-color: var(--accent-pink); width: 18px; height: 18px; cursor: pointer;" />
+          <label for="edit-message-nsfw" style="font-size: 0.88rem; font-weight: 700; color: #f472b6; cursor: pointer;">🔞 Mark as NSFW (Blur)</label>
+        </div>
+        <div style="display: flex; gap: 12px; margin-top: 10px;">
+          <button type="button" class="icon-btn" style="flex: 1; border-radius: 12px; font-size: 0.9rem; border: 1px solid var(--border-glass);" onclick="closeEditModal()">Cancel</button>
+          <button type="submit" class="auth-btn-primary" style="flex: 1;">Save Edit ⚡</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function toggleImageAttach() {
+      const container = document.getElementById('image-input-container');
+      if (container) {
+        container.style.display = container.style.display === 'none' ? 'block' : 'none';
+      }
+    }
+  </script>
+  <script src="/app.js"></script>
+</body>
+</html>
